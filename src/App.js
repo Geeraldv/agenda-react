@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./index.css";
 
 function App() {
+  const [contactos, setContactos] = useState([]);
+
+  useEffect(() => {
+    fetch("http://www.raydelto.org/agenda.php")
+      .then((response) => response.json())
+      .then((data) => setContactos(data))
+      .catch((error) => console.log(error));
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="navbar">
+        <a href="./Agregar">Agregar</a>
+      </div>
+      <div className="container">
+        {contactos.map((contacto, index) => (
+          <div key={index} className="card">
+            <div className="card-body">
+              <img
+                src={`https://robohash.org/user${index}`}
+                alt={contacto.nombre}
+              />
+              <h1 className="card-title">
+                {contacto.nombre} {contacto.apellido}
+              </h1>
+              <p className="card-text">{contacto.telefono}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
 
